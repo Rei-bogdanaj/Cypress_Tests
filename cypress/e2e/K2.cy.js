@@ -33,10 +33,11 @@ describe('Our Team', () => {
         .get('.MuiTypography-h6').contains('Add a new Member')
         .get('input[placeholder="Add member by email"]').should('be.visible').click({force:true}).type('Cypress'+generateRandomString(4)+'@gmail.com')
         .get('button').contains('Done').should('be.visible').click({force:true})
-        .get('.css-aov8do').get('.css-1auh7sb').first().find('.MuiBox-root').first().contains('-')
+        .get('.css-aov8do').get('.css-1auh7sb')
+        .first().find('.MuiBox-root').first().contains('-')
         .get('.css-aov8do').get('.css-1auh7sb').first().find('.MuiBox-root').eq(2).contains('-')
         .get('.css-aov8do').get('.css-1auh7sb').first().find('.MuiBox-root').eq(5).contains('Cypress')
-        .get('.css-aov8do').get('.css-1auh7sb').first().find('.MuiBox-root').eq(6).contains('Team Member')
+        .get('.css-aov8do').get('.css-1auh7sb').first().find('.MuiBox-root').eq(7).contains('Team Member')
 
     });
 
@@ -49,4 +50,6 @@ describe('Our Team', () => {
       .get('input[placeholder="Search members"]').should('be.visible').click({force:true}).type('Cypress{enter}')
       .get('.MuiBox-root').should('not.contain','Cypress  ')
     });
+
+
 });
