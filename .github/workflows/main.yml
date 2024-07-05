@@ -1,10 +1,12 @@
 name: Cypress Tests
 
-on: 
+on:
   push:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'  # Runs every day at 8:00 AM UTC, adjust the time as needed
 
 jobs:
   cypress-run:
@@ -16,9 +18,9 @@ jobs:
       - name: Run Cypress Tests 
         uses: cypress-io/github-action@v6
 
-      #Artifacts
+      # Artifacts
       - uses: actions/upload-artifact@v4
-        name: Upload screenshots in case of fail
+        name: Upload screenshots in case of failure
         if: failure()
         with:
           name: cypress-screenshots
