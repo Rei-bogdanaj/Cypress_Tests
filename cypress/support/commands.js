@@ -325,6 +325,42 @@ Cypress.Commands.add('Create_Active_Client', () => {
           }
     })
 })
-
-
 })
+
+/////////////// Create Personal TAX ///////////////
+
+Cypress.Commands.add('Create_Personal_Tax', () => {
+
+    cy.request({
+        method: 'POST',
+        url: "https://api-qa.k2businessgroup.com/strategy/template",
+        headers: {
+            Authorization: 'Bearer ' + Cypress.env('jwt')
+        },
+        body :{
+            "data": {
+              "name": "rei strategy ",
+              "category": "PERSONAL",
+              "steps": [
+                {
+                  "id": "7b5cddb3-553c-413b-84a5-962136bde06c",
+                  "name": "step 1",
+                  "order": 1,
+                  "tasks": [
+                    {
+                      "id": "2f48f37e-19ac-47b6-b6a7-2248a6766e7f",
+                      "name": "e",
+                      "canUploadDocument": false,
+                      "maxFiles": 4,
+                      "order": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+    )  
+          
+    })
+
