@@ -327,40 +327,159 @@ Cypress.Commands.add('Create_Active_Client', () => {
 })
 })
 
+
 /////////////// Create Personal TAX ///////////////
 
 Cypress.Commands.add('Create_Personal_Tax', () => {
+    // Function to convert object to FormData
+    function objectToFormData(obj) {
+      const formData = new FormData();
+  
+      // Flatten the object and append to FormData
+      function appendFormData(data, parentKey) {
+        if (Array.isArray(data)) {
+          data.forEach((value, index) => {
+            appendFormData(value, `${parentKey}[${index}]`);
+          });
+        } else if (typeof data === 'object' && data !== null) {
+          Object.keys(data).forEach(key => {
+            appendFormData(data[key], parentKey ? `${parentKey}.${key}` : key);
+          });
+        } else {
+          formData.append(parentKey, data);
+        }
+      }
+  
+      appendFormData(obj);
+  
+      return formData;
+    }
+  
+    const body = {
+      name: 'Cypress',
+      category: 'PERSONAL',
+      steps: [
+        {
+          name: 'Cypress 1',
+          order: 1,
+          tasks: [
+            {
+              canUploadDocument: false,
+              maxFiles: 4,
+              name: 'Cypress 2',
+              order: 1,
+            },
+          ],
+        },
+      ],
+    };
+  
+    const formData = objectToFormData(body);
+  
+    cy.request({
+      method: 'POST',
+      url: "https://api-qa.k2businessgroup.com/strategy/template",
+      headers: {
+        Authorization: 'Bearer ' + Cypress.env('jwt'),
+        'Content-Type': 'multipart/form-data'
+      },
+      body: formData, // Pass FormData object as the body
+    }).then((response) => {
+      // Handle the response if needed
+      expect(response.status).to.eq(200); // Adjust based on expected status code
+    });
+  });
+  
+
+/////////////// Get Personal TAX ///////////////
+
+Cypress.Commands.add('Get_Personal_Tax', () => {
 
     cy.request({
-        method: 'POST',
-        url: "https://api-qa.k2businessgroup.com/strategy/template",
+        method: 'GET',
+        url: "https://api-qa.k2businessgroup.com/strategy/template?category=PERSONAL",
         headers: {
             Authorization: 'Bearer ' + Cypress.env('jwt')
         },
-        body :{
-            "data": {
-              "name": "rei strategy ",
-              "category": "PERSONAL",
-              "steps": [
-                {
-                  "id": "7b5cddb3-553c-413b-84a5-962136bde06c",
-                  "name": "step 1",
-                  "order": 1,
-                  "tasks": [
-                    {
-                      "id": "2f48f37e-19ac-47b6-b6a7-2248a6766e7f",
-                      "name": "e",
-                      "canUploadDocument": false,
-                      "maxFiles": 4,
-                      "order": 1
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        }
-    )  
-          
     })
+})
 
+
+/////////////// Delete Personal TAX ///////////////
+
+Cypress.Commands.add('Delete_Personal_Tax', (templateId) => {
+
+    cy.request({
+        method: 'DELETE',
+        url: "https://api-qa.k2businessgroup.com/strategy/template/"+templateId,
+        headers: {
+            Authorization: 'Bearer ' + Cypress.env('jwt')
+        },
+    }
+    )
+})
+
+
+Cypress.Commands.add('deletePersonalTaxByNameApi', (name) =>{
+    cy.Get_Personal_Tax().then((response) =>{
+      console.log("get all Taxes",  response)
+      const itemsToDelete = [];
+      response.body.data.forEach((item) => {
+        if (item.category === name) {
+          itemsToDelete.push(item);
+        }
+      });
+      cy.wrap(itemsToDelete).each((item) => {
+        const itemId = item.id;
+        cy.Delete_Personal_Tax(itemId).then((response) =>{
+            console.log("delete all taxes",  response)
+      })
+    })
+  })
+})
+
+/////////////// Get Business TAX ///////////////
+
+Cypress.Commands.add('Get_Business_Tax', () => {
+
+    cy.request({
+        method: 'GET',
+        url: "https://api-qa.k2businessgroup.com/strategy/template?category=BUSINESS",
+        headers: {
+            Authorization: 'Bearer ' + Cypress.env('jwt')
+        },
+    })
+})
+
+/////////////// Delete Business TAX ///////////////
+
+Cypress.Commands.add('Delete_Business_Tax', (templateId) => {
+
+    cy.request({
+        method: 'DELETE',
+        url: "https://api-qa.k2businessgroup.com/strategy/template/"+templateId,
+        headers: {
+            Authorization: 'Bearer ' + Cypress.env('jwt')
+        },
+    }
+    )
+})
+
+
+Cypress.Commands.add('deleteBusinessTaxByNameApi', (name) =>{
+    cy.Get_Business_Tax().then((response) =>{
+      console.log("get all Taxes",  response)
+      const itemsToDelete = [];
+      response.body.data.forEach((item) => {
+        if (item.name === name) {
+          itemsToDelete.push(item);
+        }
+      });
+      cy.wrap(itemsToDelete).each((item) => {
+        const itemId = item.id;
+        cy.Delete_Business_Tax(itemId).then((response) =>{
+            console.log("delete all taxes",  response)
+      })
+    })
+  })
+})
