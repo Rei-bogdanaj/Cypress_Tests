@@ -71,7 +71,7 @@ describe('Client List', () => {
             console.log("RESPONSEEE",response)
             let Approval_List_Client_Email = response.body.data[0].email
         cy.LogOut_UI()
-        cy.visit('https://qa.k2businessgroup.com/onboarding/introduction')
+        cy.visit('https://k2businessgroup.qa.mytaxsaas.com/onboarding/introduction')
         .get('button').contains('Next').click()
         .get('input[placeholder="First name"]').click().type('Cypress')
         .get('input[placeholder="Last name"]').click().type('User')

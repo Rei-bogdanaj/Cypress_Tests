@@ -81,7 +81,7 @@ describe('Our Team', () => {
         const timeoutMillis = 30_0000;
         return mailslurp.waitForLatestEmail(inboxId, timeoutMillis)
       });
-      cy.visit('https://qa.k2businessgroup.com/register/member?email=rei@mailslurp.net')
+      cy.visit('https://k2businessgroup.qa.mytaxsaas.com/register/member?email=rei@mailslurp.net')
       .get('input[placeholder="First name"]').click({force:true}).type('Cypress')
       .get('input[placeholder="Last name"]').click({force:true}).type('User')
       .get('input[type="password"]').first().click({force:true}).type('Cypress1234!')

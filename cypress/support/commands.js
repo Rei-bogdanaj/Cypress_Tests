@@ -25,7 +25,7 @@ Cypress.Commands.add("Login_UI", () => {
 
     let username = 'arjel@motomtech.com'
     let password = 'Test123!'
-    cy.visit('https://qa.k2businessgroup.com')
+    cy.visit('https://k2businessgroup.qa.mytaxsaas.com/')
     cy.get('input[type="email"]').click({ force: true }).type(username)
         .get('input[type="password"]').click({ force: true }).type(password)
         .get('button').contains('Log In').click({ force: true })
